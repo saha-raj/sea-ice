@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opinion Dynamics Simulation</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Main fonts used in the template -->
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎮</text></svg>">
+</head>
+<body>
+    <div class="content">
+        <div class="text-block">
+            <h1>Social Consensus, Polarization, and the Power of Zealots</h1>
+            <div class="author">
+                <p>By Raj Saha, PhD</p>
+            </div>
+            
+            <p>
+                We're all familiar with the term <i>polarization</i> in the context of social consensus and political beliefs. The basic
+                premise is simple: repeated exposure to shared beliefs strengthens those beliefs, which in turn leads to even greater
+                exposure to similar views. This runaway effect then inevitably produces clusters of opposing beliefs - echo chambers.
+            </p>
+            <p>
+                While the real world is vastly more complex, this basic mechanism remains a core driver of polarization. We can simulate
+                and visualize these dynamics using simple rules and assumptions. We can also explore the role of zealots - individuals who
+                are stubborn, never change their views, yet constantly proselytize - in shaping how consensus forms and evolves within a
+                social network.
+            </p>
+            <p>
+                This simulation, inspired by Centola et al. (2018), models two groups of <i>N</i> agents, in proportions <i>k</i> and <i>(1−k)</i>, holding
+                opposing beliefs on a scale from −1 to +1. Positive and negative values represent the views of the two groups. Each
+                agent is connected to others - both within their group and, in some cases, across group lines - simulating a social network.
+            </p>
+            <p>
+                Agents interact pairwise through these connections. Each interaction may shift an agent's belief closer to the other's,
+                depending on various factors such as susceptibility and influence. However, zealots never change their views. Their
+                presence can stabilize, polarize, or even shift consensus in unexpected ways. Through this simulation, we can explore
+                how such simple interaction rules lead to complex collective behavior.
+            </p>
+        </div>
+
+        <!-- insert image here -->
+        
+
+        <div class="text-block">
+            <h2>Assumptions</h2>
+            
+            <p>This simulation, like all models, makes several simplifying assumptions to help us understand complex social dynamics:</p>
+            
+            <ul>
+                <li>People's beliefs exist on a continuous spectrum, not just binary categories</li>
+                <li>Social influence happens primarily through direct connections</li>
+                <li>People are more susceptible to opposing views when surrounded by them</li>
+                <li>Zealots never change their minds, regardless of social pressure</li>
+                <li>Network connections form with a bias toward similar opinions (homophily)</li>
+                <li>All non-zealot agents follow the same influence rules</li>
+            </ul>
+            
+            <p>These assumptions create an idealized model that captures key aspects of opinion dynamics while remaining tractable. Real-world social systems are vastly more complex, with individuals following different influence rules, having varying susceptibilities, and interacting through multiple channels beyond direct connections.</p>
+            
+            <p>The model isn't meant to predict specific real-world outcomes, but rather to help us understand and visualize the mechanisms that might drive polarization and consensus formation in social networks.</p>
+            
+            <h2>Flipping the Minority</h2>
+            
+            <p>One of the most interesting phenomena this model reveals is how a minority opinion can sometimes overtake the majority.</p>
+            
+            <p>Two key factors determine whether this happens:</p>
+            
+            <ol>
+                <li><strong>Zealot proportions</strong>: When one side has more zealots than the other, they exert disproportionate influence. Even a small group of unwavering believers can gradually pull the entire population toward their view if the opposing side has fewer zealots.</li>
+                <li><strong>Network homophily</strong>: The degree to which people connect with like-minded others dramatically affects opinion spread. Higher homophily creates echo chambers that slow down opinion change, while lower homophily allows minority views to spread more easily through cross-group connections.</li>
+            </ol>
+            
+            <p>The interplay between these factors creates tipping points where small changes in initial conditions can lead to dramatically different outcomes. For example, a slight increase in red zealots might flip a predominantly blue population to red, even when starting with fewer red agents overall.</p>
+            
+            <p>This helps explain why seemingly stable social consensus can sometimes rapidly shift, and why vocal minorities can sometimes have outsized influence on public opinion.</p>
+        </div>
+
+        <div class="text-block">
+            <div class="citation">
+                <p>
+                    <strong>Reference:</strong> Damon Centola, Joshua Becker, Devon Brackbill, and Andrea Baronchelli.
+                    "Experimental evidence for tipping points in social convention."
+                    <em>Science</em>, 360(6393), 1116-1119 (2018).
+                    DOI: <a href="https://doi.org/10.1126/science.aas8827" target="_blank">10.1126/science.aas8827</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <div class="section-divider"></div>
+
+    <div class="more-stories">
+        <div class="content">
+            <h3>More Visual Stories</h3>
+        <div class="stories-grid">
+            <div class="story-card">
+                <a href="https://saha-raj.github.io/tipping-points-climate/" class="story-card-link">
+                    <img src="images/stories/tipping-pts-earth-sim.gif" alt="Story 1">
+                    <div class="story-card-content">
+                        <h4>Tipping Points in Climate</h4>
+                        <p>A simple model to demonstrate tipping points in climate ...</p>
+                    </div>
+                </a>
+            </div>
+            <div class="story-card">
+                <a href="https://saha-raj.github.io/great-salt-lake/" class="story-card-link">
+                    <img src="images/stories/great_salt_lake.gif" alt="Story 2">
+                    <div class="story-card-content">
+                        <h4>The Changing Great Salt Lake</h4>
+                        <p>How the Great Salt Lake has been shrinking ...</p>
+                    </div>
+                </a>
+            </div>
+            <div class="story-card">
+                <a href="https://saha-raj.github.io/mangroves/" class="story-card-link">
+                    <img src="images/stories/mangroves.gif" alt="Story 3">
+                    <div class="story-card-content">
+                        <h4>How Mangroves Slow Coastal Erosion</h4>
+                        <p>Mangroves slow coastal erosion by stabilizing the shoreline...</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <p>© 2024 Raj Saha</p>
+        <p><a href="https://github.com/saha-raj/" target="_blank">Github</a> / <a
+                href="https://www.linkedin.com/in/rajsahaphd/" target="_blank">LinkedIn</a></p>
+    </div>
+</footer>
+
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Load our JavaScript modules -->
+    <script src="js/agent.js"></script>
+    <script src="js/simulation.js"></script>
+    <script src="js/visualization.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
