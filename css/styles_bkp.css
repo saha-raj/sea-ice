@@ -1,0 +1,922 @@
+/* CSS Variables */
+:root {
+  /* Typography - Title Font Options */
+  --title-font: "Noto Sans", sans-serif;
+  
+  /* Typography - Body Font Options */
+  --body-font: "Noto Sans", sans-serif;
+  
+  /* UI Font */
+  --ui-font: "Noto Sans", sans-serif;
+  
+  /* Author Font */
+  --author-font: "Lato", sans-serif;
+  
+  /* Font sizes */
+  --base-font-size: 16px;
+  --h1-size: 2.5rem;
+  --h2-size: 1.6rem;
+  --h3-size: 1.3rem;
+  --h4-size: 1.1rem;
+  --body-size: 1rem;
+  --small-text: 0.9rem;
+  --author-size: 1rem;
+  
+  /* Colors */
+  --text-color: #333;
+  --background-color: #efefef;
+  --content-bg: #efefef;
+  --footer-bg: #f5f5f5;
+  --author-text: #6c757d;
+  --footer-text: #adb5bd;
+  --sim-bg: #fff;
+  --card-bg: white;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  
+  /* UI Colors */
+  --primary-btn: #3a86ff;
+  --primary-btn-hover: #2a75ee;
+  --danger-btn: #ef476f;
+  --danger-btn-hover: #e02f5a;
+  --control-bg: #f8f9fa;
+  --border-color: #e5e5e5;
+  
+  /* Layout */
+  --content-width: 800px;
+  --content-padding: 2rem 1rem;
+  --section-spacing: 2.5rem;
+  --simulation-width: 95vw;
+  --simulation-max-width: 1400px;
+}
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: var(--ui-font);
+  font-size: var(--base-font-size);
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 120vh;
+  margin: 0;
+  padding: 0;
+  color: var(--text-color);
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: var(--title-font);
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: var(--h1-size);
+  margin-bottom: 1.2rem;
+  margin-top: 2.5rem;
+}
+
+h2 {
+  font-size: var(--h2-size);
+  margin-top: var(--section-spacing);
+  margin-bottom: 1.2rem;
+}
+
+h3 {
+  font-size: var(--h3-size);
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: var(--h4-size);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+p {
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+ul, ol {
+  font-family: var(--body-font);
+  font-size: var(--body-size);
+  line-height: 1.5;
+  color: var(--text-color);
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+/* Author styling */
+.author {
+  margin: 0.8rem 0 1.5rem 0;
+  font-family: var(--author-font);
+  font-style: normal;
+  font-weight: 400;
+}
+
+.author p {
+  margin: 0;
+  font-family: var(--author-font);
+  color: var(--author-text);
+  font-size: var(--author-size);
+  margin-bottom: 4rem;
+}
+
+/* Content */
+.content {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: var(--content-padding);
+  background-color: var(--content-bg);
+  position: relative;
+  overflow: visible;
+}
+
+.text-block {
+  margin-bottom: 2rem;
+}
+
+/* Simulation section */
+.simulation-container {
+    background-color: var(--sim-bg);
+    margin: 2rem 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inner container to center the grid */
+.simulation-inner {
+    width: 90%;
+    max-width: 1600px;
+    min-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* Three column layout */
+.simulation-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr 450px; /* Adjusted to match the width above */
+    gap: 20px;
+    height: 100%;
+}
+
+/* All columns */
+.controls-column, .agent-pool-column, .histogram-column {
+}
+
+/* Controls column */
+.controls-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-self: start;
+}
+
+/* Visualization columns */
+.agent-pool-column, .histogram-column {
+    height: 500px;
+    overflow: hidden;
+    align-self: center;
+}
+
+/* Agent pool column specific */
+.agent-pool-column {
+    width: 600px; /* Increased width */
+    height: 600px; /* Increased height */
+    position: relative; /* Make it a positioning context */
+}
+
+/* Histogram column specific */
+.histogram-column {
+    width: 450px; /* Changed from 400px to 450px */
+    max-width: 100%;
+    height: 500px;
+    overflow: hidden;
+}
+
+/* SVG containers */
+.agent-pool-visualization, 
+.agent-pool-visualization svg,
+.histogram-column svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Strategy selection */
+.strategy-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.strategy-group {
+  margin-bottom: 12px;
+}
+
+.strategy-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+.strategy-description {
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 4px;
+  margin-bottom: 0;
+  min-height: 2em; /* Ensure consistent height even when empty */
+}
+
+/* Color indicator styling */
+.color-indicator {
+  display: none; /* Hide color indicators */
+}
+
+/* Proportion control styling */
+.proportion-control-container {
+  background-color: var(--control-bg);
+  padding: 12px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.proportion-control-container h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.proportion-slider-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.proportion-slider {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  background: #ddd;
+}
+
+.proportion-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #577590;
+  cursor: pointer;
+}
+
+.proportion-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #577590;
+  cursor: pointer;
+}
+
+.proportion-label {
+  font-size: 12px;
+  font-weight: bold;
+  width: 40px;
+  text-align: center;
+}
+
+/* Tournament parameters */
+.tournament-params {
+  background-color: var(--control-bg);
+  padding: 12px 15px;
+  border-radius: 4px;
+  border: none;
+}
+
+.param-group {
+  margin-bottom: 20px;
+}
+
+.param-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.param-description {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.slider-container input[type="range"] {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  outline: none;
+  margin: 5px 0;
+}
+
+.slider-container input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #577590;
+  cursor: pointer;
+}
+
+.slider-container input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #577590;
+  cursor: pointer;
+}
+
+.slider-minmax {
+  display: flex;
+  justify-content: space-between; /* Return to space-between for proportion slider */
+  width: 100%;
+}
+
+/* Only hide min values for sliders other than proportion */
+.param-group:not(:first-child) .slider-min {
+  display: none; /* Hide min values for all except proportion slider */
+  text-align: left;
+  font-size: 12px;
+}
+
+/* For proportion slider specifically */
+.param-group:first-child .slider-min {
+  display: block; /* Show for proportion slider */
+  text-align: left;
+  font-size: 12px;
+}
+
+.slider-max {
+  text-align: right;
+  font-size: 12px;
+}
+
+/* Button styling */
+.button-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.button-group button {
+  flex: 1;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#start-tournament {
+  background-color: var(--primary-btn);
+  color: white;
+}
+
+#start-tournament:hover:not(:disabled) {
+  background-color: var(--primary-btn-hover);
+}
+
+#stop-tournament {
+  background-color: var(--danger-btn);
+  color: white;
+}
+
+#stop-tournament:hover:not(:disabled) {
+  background-color: var(--danger-btn-hover);
+}
+
+#reset-visualization {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+#reset-visualization:hover {
+  background-color: #e9ecef;
+}
+
+/* Button disabled state */
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #ddd; /* Gray border for disabled state */
+}
+
+/* Form controls styling */
+select {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: white;
+  font-family: var(--ui-font);
+  font-size: 0.9rem;
+  color: var(--text-color);
+  width: 100%;
+  max-width: 100%;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  height: 62px; /* Increased height to fit two lines by default */
+  /* Custom select styling for flat, minimalist appearance */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none' stroke='%23666' stroke-width='1.5'><path d='M1,1 L7,7 L13,1' /></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  white-space: normal; /* Allow text to wrap */
+}
+
+select:focus {
+  border-color: var(--primary-btn);
+}
+
+select option {
+  padding: 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  min-height: 62px; /* Match the height of the select */
+  white-space: normal;
+  text-align: left;
+}
+
+select option::before {
+  content: attr(value);
+  display: inline;
+  font-weight: 600;
+}
+
+/* Style for strategy name and description in dropdowns */
+.strategy-name {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.strategy-desc {
+  display: block;
+  font-size: 0.8rem;
+  color: #999;
+  font-style: italic;
+}
+
+/* Running indicator */
+#running-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #adb6c4;
+  font-weight: bold;
+  font-size: 13px;
+  font-family: var(--ui-font);
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 6px 12px;
+  border-radius: 4px;
+  z-index: 100;
+}
+
+#running-indicator.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(173, 182, 196, 0.3);
+  border-top-color: #adb6c4;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Strategy node styling */
+.strategy circle {
+  cursor: pointer;
+  transition: r 0.3s ease-out, stroke-width 0.3s ease-out;
+}
+
+.strategy circle:hover {
+  stroke-width: 3px;
+  stroke: #fff;
+}
+
+.strategy text {
+  pointer-events: none;
+  font-family: var(--ui-font);
+}
+
+.matchup-line {
+  pointer-events: none;
+}
+
+/* Agent pool styling */
+.agent {
+  transition: r 0.3s ease-out;
+  cursor: pointer;
+}
+
+.agent:hover {
+  opacity: 0.9;
+}
+
+/* Histogram styling */
+.histogram-area {
+  transition: d 0.3s ease-out;
+}
+
+.histogram-area:hover {
+  opacity: 0.8;
+}
+
+.histogram-line {
+  transition: d 0.3s ease-out;
+  pointer-events: none;
+}
+
+/* Axis styling */
+.x-axis path,
+.x-axis line,
+.y-axis path,
+.y-axis line {
+  stroke: #ccc;
+  stroke-width: 1px;
+}
+
+.x-axis text,
+.y-axis text {
+  font-size: 11px;
+  fill: #666;
+  font-family: var(--ui-font);
+}
+
+.x-axis-label,
+.y-axis-label {
+  font-size: 12px;
+  fill: #333;
+  font-family: var(--ui-font);
+}
+
+/* Legend styling */
+.legend-item text {
+  fill: #333;
+  font-family: var(--ui-font);
+  font-size: 12px;
+}
+
+/* Grid lines */
+.grid-line {
+  stroke: #eee;
+  stroke-width: 1;
+}
+
+/* Y-axis labels */
+.left-y-label, .right-y-label {
+  font-size: 10px;
+  fill: #777;
+  font-family: var(--ui-font);
+}
+
+/* Winner styles */
+.winner-label {
+  font-size: 13px;
+  text-align: center;
+  color: var(--primary-btn);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-family: var(--ui-font);
+  font-weight: bold;
+}
+
+/* Strategy name and total score text */
+.strategy-name-label, .strategy-label {
+  font-family: var(--ui-font);
+  font-size: 15px !important;
+}
+
+.total-score, .avg-score {
+  font-family: var(--ui-font);
+  font-size: 12px !important;
+}
+.section-divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--footer-text);
+    opacity: 0.3;
+    margin: 4rem auto;
+    width: 100%;
+    max-width: var(--content-width);
+}
+
+/* More Stories section */
+.more-stories {
+    background: var(--background-color);
+    padding: var(--section-spacing) 0;
+    margin-top: 4rem;
+    width: 100%;
+}
+
+.more-stories .content {
+    max-width: 100%;
+    padding: 0 2rem;
+    background-color: transparent;
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: start;
+}
+
+.story-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.story-card {
+    background: var(--card-bg);
+    overflow: hidden;
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+}
+
+.story-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+    background-color: #000;
+}
+
+.story-card-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.story-card h4 {
+    font-size: var(--h4-size);
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+}
+
+.story-card p {
+    margin: 0;
+    font-size: var(--small-text);
+    color: var(--footer-text);
+}
+
+/* Center the "More Stories" heading */
+.more-stories h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Footer */
+.footer {
+  min-height: 20vh;
+  background-color: var(--footer-bg);
+  margin-top: 3rem;
+  padding: 2rem 0;
+}
+
+.footer .container {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 1rem;
+  color: var(--footer-text);
+}
+
+.footer p {
+  margin-bottom: 1rem;
+  color: var(--footer-text);
+  font-family: var(--ui-font);
+  font-size: 0.9rem;
+}
+
+.footer a {
+  color: var(--footer-text);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom-color 0.2s ease-in-out;
+}
+
+.footer a:hover {
+  border-bottom-color: var(--footer-text);
+}
+
+/* Media queries for responsive layout */
+@media (max-width: 1024px) {
+    /* Tablet layout - stack in 2 rows */
+    .simulation-grid {
+        grid-template-columns: minmax(auto, 400px) 1fr;
+        grid-template-areas:
+            "controls simulation"
+            "histogram histogram";
+        gap: 20px;
+    }
+    
+    .controls-column {
+        grid-area: controls;
+    }
+    
+    .agent-pool-column {
+        grid-area: simulation;
+        width: 100%;
+        max-width: 600px;
+        height: 600px;
+    }
+    
+    .histogram-column {
+        grid-area: histogram;
+        width: 100%;
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile layout - stack vertically */
+    .simulation-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "controls"
+            "simulation"
+            "histogram";
+    }
+    
+    .simulation-inner {
+        min-width: auto;
+        width: 95%;
+    }
+    
+    .agent-pool-column {
+        width: 100%;
+        height: 500px;
+    }
+    
+    .histogram-column {
+        width: 100%;
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Small mobile adjustments */
+    .simulation-container {
+        padding: 1rem;
+    }
+    
+    .simulation-inner {
+        padding: 5px;
+    }
+    
+    .simulation-grid {
+        gap: 15px;
+    }
+}
+
+/* Position the running indicator inside the agent-pool-column */
+.agent-pool-column {
+    position: relative; /* Make it a positioning context */
+}
+
+/* Add styles for disabled sliders and buttons */
+input[type="range"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+}
+
+/* Style for the disabled slider labels */
+.param-group:has(input:disabled) .param-description,
+.param-group:has(input:disabled) label,
+.param-group:has(input:disabled) .slider-minmax {
+    opacity: 0.5;
+}
+
+/* Citation styling */
+.citation {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 2rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.citation a {
+    color: #3a86ff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.citation a:hover {
+    text-decoration: underline;
+}
+
+/* Media container for images and videos */
+.media-container {
+    margin: 3rem 0;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    max-width: 100vw;
+}
+
+.full-width-image {
+    width: 90%;
+    max-width: 1200px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: none;
+    margin: 0 auto;
+    display: block;
+}
+
+.caption {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 1rem;
+    text-align: center;
+    font-style: italic;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+} 

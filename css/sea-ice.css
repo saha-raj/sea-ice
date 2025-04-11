@@ -1,0 +1,243 @@
+/**
+ * Sea Ice Visualization Styles
+ */
+
+/* Container for the 3D sea ice visualization */
+#sea-ice-container {
+  margin: 3rem 0;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  max-width: 100vw;
+}
+
+/* Main visualization area */
+#sea-ice-visualization {
+  width: 90%;
+  max-width: 1200px;
+  height: 600px;
+  border-radius: 4px;
+  box-shadow: none;
+  margin: 0 auto;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+/* Make canvas responsive */
+#sea-ice-visualization canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Time controls panel */
+.ice-time-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 10px 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  width: 80%;
+  max-width: 500px;
+  font-family: var(--noto-sans);
+}
+
+/* Time label */
+.time-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-right: 15px;
+  white-space: nowrap;
+  min-width: 100px;
+  color: #333;
+}
+
+/* Slider styles */
+.time-slider {
+  flex-grow: 1;
+  -webkit-appearance: none;
+  height: 4px;
+  background: #e0e0e0;
+  border-radius: 2px;
+  outline: none;
+  margin: 0 10px;
+}
+
+.time-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0077b6;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.time-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.time-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #0077b6;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s ease;
+}
+
+.time-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.time-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Play/pause button */
+.play-button {
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-left: 10px;
+}
+
+.play-button:hover {
+  background-color: #005b8a;
+  transform: scale(1.05);
+}
+
+.play-button:active {
+  transform: scale(0.95);
+}
+
+.play-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Caption for the visualization */
+.sea-ice-caption {
+  font-size: 0.9rem;
+  color: #666;
+  margin-top: 1rem;
+  text-align: center;
+  font-style: italic;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* WebGL error message */
+.webgl-error {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 80%;
+  text-align: center;
+}
+
+.webgl-error p {
+  margin: 0;
+  color: #d32f2f;
+  font-weight: 500;
+}
+
+/* Loading indicator */
+.loading-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #0077b6;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+.loading-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  #sea-ice-visualization {
+    height: 400px;
+  }
+  
+  .time-label {
+    min-width: 80px;
+    font-size: 0.8rem;
+  }
+  
+  .ice-time-controls {
+    padding: 8px 12px;
+    bottom: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #sea-ice-visualization {
+    height: 300px;
+  }
+  
+  .ice-time-controls {
+    bottom: 10px;
+    padding: 6px 10px;
+  }
+  
+  .time-label {
+    min-width: 70px;
+    font-size: 0.7rem;
+    margin-right: 8px;
+  }
+  
+  .play-button {
+    width: 28px;
+    height: 28px;
+  }
+} 

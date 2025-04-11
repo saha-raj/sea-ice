@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sea Ice Extent Visualization</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Main fonts used in the template -->
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/sea-ice.css">
+</head>
+<body>
+    <div class="content">
+        <div class="text-block">
+            <h1>Sea Ice Extent Visualization</h1>
+            <div class="author">
+                <p>By Raj Saha</p>
+            </div>
+            
+            <p>Arctic sea ice has been declining dramatically in recent decades due to climate change. This visualization shows the changing extent of sea ice in the Arctic from 2003 to 2020, based on satellite observations.</p>
+            
+            <p>The visualization uses 3D rendering to display sea ice extent changes over time, showing how the Arctic ice cap has diminished in both area and thickness.</p>
+            
+        </div>
+
+        <!-- Sea Ice Visualization Container -->
+        <div class="media-container">
+            <div id="sea-ice-visualization" class="full-width-image"></div>
+            <p class="caption">3D visualization of Arctic sea ice extent, showing changes from 2003 to 2020. Data source: National Snow and Ice Data Center.</p>
+        </div>
+
+        <div class="text-block">
+            <h2>The Arctic Ice Cap</h2>
+            
+            <p>The Arctic sea ice acts as Earth's air conditioner, reflecting solar radiation back into space and regulating global temperatures. As this ice melts due to rising temperatures, it creates a feedback loop: less ice means more heat absorption by the darker ocean water, leading to even faster warming.</p>
+            
+            <p>This visualization illustrates the dramatic changes in sea ice extent over the past two decades, with record lows occurring increasingly frequently.</p>
+            
+            <p>Scientists monitor these changes carefully, as they have significant implications for global weather patterns, ocean circulation, and ecosystems.</p>
+            
+        </div>
+
+        <div class="media-container">
+            <img src="images/combo_0131.png" alt="Fireflies synchronizing their flashes" class="full-width-image">
+            <p class="caption">Fireflies synchronizing their flashes in a forest. The patterns emerge from simple individual
+                behaviors.</p>
+        </div>
+
+        <div class="text-block">
+            <div class="citation">
+                <p>
+                    <strong>Reference:</strong> Damon Centola, Joshua Becker, Devon Brackbill, and Andrea Baronchelli.
+                    "Experimental evidence for tipping points in social convention."
+                    <em>Science</em>, 360(6393), 1116-1119 (2018).
+                    DOI: <a href="https://doi.org/10.1126/science.aas8827" target="_blank">10.1126/science.aas8827</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    
+    <div class="section-divider"></div> 
+
+    <div id="more-stories-container"></div>
+
+    <script src="assets/js/stories-carousel.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('more-stories.html')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('more-stories-container').innerHTML = html;
+                    // Initialize the carousel after the content is loaded
+                    if (typeof initStoryCarousel === 'function') {
+                        setTimeout(initStoryCarousel, 100);
+                    }
+                })
+                .catch(error => console.error('Error loading more-stories section:', error));
+        });
+    </script>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 Raj Saha</p>
+            <p><a href="https://github.com/saha-raj/" target="_blank">Github</a> / <a
+                    href="https://www.linkedin.com/in/rajsahaphd/" target="_blank">LinkedIn</a></p>
+        </div>
+    </footer>
+
+    <!-- Load D3.js -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Load THREE.js and related libraries -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script type="module" src="assets/js/sea-ice-visualization/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,441 @@
+/* More Stories Section */
+.more-stories {
+    background: var(--background-color);
+    padding: var(--section-spacing) 0;
+    margin-top: 4rem;
+    width: 100%;
+}
+
+.section-divider {
+    border: 0;
+    height: 1px;
+    background-color: var(--footer-text);
+    opacity: 0.3;
+    margin: 4rem auto;
+    width: 100%;
+    max-width: var(--content-width);
+}
+
+.more-stories .content {
+    max-width: 100%;
+    padding: 0 2rem;
+    background-color: transparent;
+}
+
+.more-stories h3 {
+    font-family: var(--title-font);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: start;
+}
+
+/* Story Cards */
+.stories-track .story-card {
+    flex: 0 0 auto;
+    width: calc(33.333% - 20px);
+    /* Show 3 cards by default, with margins */
+    margin: 0 10px;
+    background: var(--card-bg);
+    border-radius: 8px !important;
+    overflow: visible;
+    /* Changed from hidden to visible */
+    box-shadow: none;
+    border: none !important;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transform-origin: center center;
+    position: relative;
+    z-index: 1;
+}
+
+.stories-track .story-card:hover,
+.stories-track .story-card:focus,
+.stories-track .story-card:active {
+    border: none !important;
+    border-bottom: none !important;
+    text-decoration: none;
+    outline: none;
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    /* Bring hovered card to front */
+    border-radius: 8px !important;
+}
+
+/* Override any default link styles for story cards */
+a.story-card,
+a.story-card:hover,
+a.story-card:active,
+a.story-card:visited,
+a.story-card:focus {
+    border: none !important;
+    border-bottom: none !important;
+    text-decoration: none !important;
+}
+
+/* Story card content styling */
+.story-card-content {
+    padding: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+.story-card h4 {
+    font-family: var(--title-font);
+    font-size: var(--h4-size);
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.story-card p {
+    margin: 0;
+    font-size: var(--small-text);
+    color: var(--footer-text);
+}
+
+.story-card:hover h4 {
+    color: #0077b6;
+}
+
+/* Story card media container with aspect ratio */
+.story-card-media {
+    position: relative;
+    width: 100%;
+    padding-top: 107.5%;
+    /* 1/0.93 ≈ 107.5% to create 0.93:1 ratio */
+    overflow: hidden;
+    /* Keep media content contained */
+    background-color: #fff;
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+    border: none !important;
+    border-bottom: none !important;
+    transition: none !important;
+}
+
+.story-card-media img,
+.story-card-media video {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+    height: 100%;
+    object-fit: cover;
+    border: 0 !important;
+    border-bottom: 0 !important;
+    outline: 0 !important;
+    transition: none !important;
+    box-shadow: none !important;
+}
+
+/* Additional specific rule to override any hover borders on media elements */
+.stories-track .story-card:hover .story-card-media,
+.stories-track .story-card:focus .story-card-media,
+.stories-track .story-card:active .story-card-media {
+    border: none !important;
+    border-bottom: none !important;
+    outline: none !important;
+    transition: none !important;
+}
+
+.stories-track .story-card:hover .story-card-media img,
+.stories-track .story-card:hover .story-card-media video,
+.stories-track .story-card:focus .story-card-media img,
+.stories-track .story-card:focus .story-card-media video,
+.stories-track .story-card:active .story-card-media img,
+.stories-track .story-card:active .story-card-media video {
+    border: 0 !important;
+    border-bottom: 0 !important;
+    outline: 0 !important;
+    transition: none !important;
+    box-shadow: none !important;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1100px) {
+    .story-card {
+        width: calc(25% - 20px);
+        /* Show 4 cards on large screens */
+        border-radius: 8px !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .story-card {
+        width: calc(50% - 20px);
+        /* Show 2 cards on medium screens */
+        border-radius: 8px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .story-card {
+        width: calc(100% - 20px);
+        /* Show 1 card on smaller screens */
+        border-radius: 8px !important;
+    }
+
+    .stories-carousel-container {
+        padding: 0 30px;
+    }
+}
+
+/* Stories Carousel */
+.stories-carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    /* Space for navigation buttons */
+}
+
+.stories-carousel {
+    width: 100%;
+    overflow: visible;
+    /* Allow cards to expand outside of container on hover */
+    position: relative;
+    padding: 10px 0 20px 0;
+    /* Add padding to accommodate transformed cards */
+}
+
+.stories-track {
+    display: flex;
+    transition: transform 0.4s ease-in-out;
+    padding: 10px 0;
+    /* Add padding to accommodate shadows */
+}
+
+.story-card:hover h4 {
+    color: #0070f3;
+}
+
+/* Navigation buttons */
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid #eaeaea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    color: #666;
+}
+
+.carousel-nav:hover {
+    background-color: #f5f5f5;
+    /* color: #333; */
+}
+
+.carousel-nav.prev {
+    left: 0;
+}
+
+.carousel-nav.next {
+    right: 0;
+}
+
+/* Fix story card styling to remove hover border and ensure consistent rounded corners */
+a.story-card {
+    border-bottom: none;
+    border: none !important;
+}
+
+.stories-track a.story-card:hover {
+    border-bottom: none !important;
+    border-bottom-color: transparent;
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Completely remove any border from story card links */
+.stories-track a.story-card,
+.stories-track a.story-card:hover,
+.stories-track a.story-card:focus,
+.stories-track a.story-card:active {
+    border: none;
+    border-bottom: none;
+    text-decoration: none;
+    outline: none;
+}
+
+/* Ensure consistent rounded corners on all story cards, including when hovered */
+.stories-track .story-card {
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+.stories-track .story-card:hover {
+    border-radius: 8px !important;
+}
+
+/* Prevent any hover border on story card media */
+.story-card-media,
+.story-card-media img,
+.story-card-media video {
+    border: none !important;
+    outline: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    :root {
+        --base-font-size: 16px;
+        --h1-size: 2rem;
+    }
+}
+
+/* Override the default a:hover behavior specifically for story cards */
+.more-stories a:hover,
+.more-stories a:hover *,
+.more-stories a:hover *:before,
+.more-stories a:hover *:after {
+    border: none !important;
+    border-bottom: none !important;
+    border-color: transparent !important;
+    border-bottom-color: transparent !important;
+    outline: none !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+}
+
+/* Ultimate override for story card borders - added at the end to have maximum specificity */
+.story-card,
+.story-card *,
+.story-card:hover,
+.story-card:hover *,
+.stories-track .story-card,
+.stories-track .story-card *,
+.stories-track .story-card:hover,
+.stories-track .story-card:hover *,
+.story-card-media,
+.story-card-media *,
+.story-card-media img,
+.story-card-media video,
+.story-card:hover .story-card-media,
+.story-card:hover .story-card-media img,
+.story-card:hover .story-card-media video,
+.story-card::before,
+.story-card::after,
+.story-card *::before,
+.story-card *::after,
+.story-card:hover::before,
+.story-card:hover::after,
+.story-card:hover *::before,
+.story-card:hover *::after {
+    border: 0 none !important;
+    border-bottom: 0 none !important;
+    border-top: 0 none !important;
+    border-left: 0 none !important;
+    border-right: 0 none !important;
+    border-color: transparent !important;
+    border-style: none !important;
+    border-width: 0 !important;
+    outline: 0 none !important;
+}
+
+/* Prevent hover events on media elements */
+.story-card-media,
+.story-card-media img,
+.story-card-media video {
+    pointer-events: none !important;
+}
+
+/* Apply border radius only where needed */
+.story-card,
+.story-card:hover {
+    border-radius: 8px !important;
+}
+
+.story-card-media {
+    border-top-left-radius: 8px !important;
+    border-top-right-radius: 8px !important;
+}
+
+.story-card-content {
+    border-bottom-left-radius: 8px !important;
+    border-bottom-right-radius: 8px !important;
+}
+
+/* Ultimate video element reset - this overrides ALL browser styling for videos */
+video {
+    all: initial !important;
+    /* Reset all properties */
+    display: block !important;
+    /* Maintain block display */
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    background-clip: padding-box !important;
+    /* Prevent background extending into border area */
+    -webkit-background-clip: padding-box !important;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Video wrapper to isolate media elements */
+.video-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    outline: 0 !important;
+}
+
+.video-wrapper * {
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    border: 0 !important;
+    border-width: 0 !important;
+    border-style: none !important;
+    border-color: transparent !important;
+    outline: 0 !important;
+}
