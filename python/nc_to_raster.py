@@ -7,10 +7,12 @@ from rasterio.enums import Resampling  # For specifying resampling method
 from affine import Affine
 import re  # Import regular expressions for filename parsing
 from scipy import ndimage  # Import scipy for dilation, labeling, and center of mass
+from skimage import measure, morphology  # For contour finding and smoothing
+import json  # For saving GeoJSON
 
 # --- Configuration ---
 # Update the input filename
-INPUT_NETCDF = Path("data/asi-AMSR2-n6250-20200923-v5.4.nc")
+INPUT_NETCDF = Path("data/asi-AMSR2-n6250-20160417-v5.4.nc")
 OUTPUT_DIR = Path("output_textures")
 RASTER_WIDTH = 2048
 RASTER_HEIGHT = 1024
@@ -311,9 +313,74 @@ if __name__ == "__main__":
         # --- 6. Save Image ---
         # Use the HARDCODED filename as requested
         output_filename = "sea_ice_20200923_2048x1024_netcdf_global_nh_only.png"
+        output_filename = '20160417.png'
         output_path = OUTPUT_DIR / output_filename
         print(f"Saving image to fixed filename: {output_path}")  # Log the fixed name
         save_rgba_png(rgba_image, output_path)
+
+        # --- 7. Extract and Save Ice Outline ---
+        print("Extracting smooth outline of largest ice mass...")
+        
+        # Create binary mask of high concentration ice
+        ice_mask = ~np.isnan(grid_with_hole_filled) & (grid_with_hole_filled > HIGH_CONC_THRESHOLD)
+        
+        # Label connected components and find the largest
+        labels, num_features = ndimage.label(ice_mask)
+        if num_features > 0:
+            # Find sizes of all features
+            sizes = ndimage.sum(ice_mask, labels, range(1, num_features + 1))
+            largest_feature = np.argmax(sizes) + 1
+            
+            # Keep only the largest feature
+            largest_mask = (labels == largest_feature)
+            
+            # Apply some morphological operations to smooth the mask
+            largest_mask = morphology.binary_closing(largest_mask)
+            largest_mask = morphology.binary_opening(largest_mask)
+            
+            # Find contours of the smoothed mask
+            contours = measure.find_contours(largest_mask.astype(float), 0.5)
+            
+            if contours:
+                # Get the longest contour (main outline)
+                longest_contour = max(contours, key=len)
+                
+                # Convert pixel coordinates to lon/lat
+                lon_coords = -180 + (longest_contour[:, 1] / RASTER_WIDTH) * 360
+                lat_coords = 90 - (longest_contour[:, 0] / RASTER_HEIGHT) * 180
+                
+                # Create coordinate pairs for GeoJSON
+                coordinates = np.column_stack([lon_coords, lat_coords])
+                
+                # Reduce number of points while preserving shape
+                # Take every Nth point (adjust N to balance detail and file size)
+                N = 5
+                coordinates = coordinates[::N]
+                
+                # Create GeoJSON feature
+                geojson = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": coordinates.tolist()
+                    },
+                    "properties": {
+                        "date": "20200923",  # Extract from filename if needed
+                        "threshold": HIGH_CONC_THRESHOLD
+                    }
+                }
+                
+                # Save outline
+                outline_filename = f"outline_{output_filename.replace('.png', '.geojson')}"
+                outline_path = OUTPUT_DIR / outline_filename
+                print(f"Saving outline to: {outline_path}")
+                with open(outline_path, 'w') as f:
+                    json.dump(geojson, f)
+                print("Outline saved successfully.")
+            else:
+                print("No contours found in the largest ice mass.")
+        else:
+            print("No ice masses found above threshold.")
 
     except FileNotFoundError:
         print(f"Error: Input file not found at {INPUT_NETCDF}")

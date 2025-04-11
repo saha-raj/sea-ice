@@ -27,6 +27,37 @@
   background-color: rgba(0, 0, 0, 0.03);
 }
 
+/* Date display in visualization */
+.sea-ice-date-display {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  font-size: 48px;
+  color: #EFEFEF;
+  /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); */
+  z-index: 10;
+  padding: 5px;
+  /* background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px; */
+}
+
+/* Source attribution in visualization */
+.sea-ice-source-display {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  color: #E0FBFC;
+  z-index: 10;
+  padding: 5px;
+  /* background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 4px; */
+  max-width: 80%;
+}
+
 /* Make canvas responsive */
 #sea-ice-visualization canvas {
   width: 100% !important;
@@ -218,6 +249,18 @@
     padding: 8px 12px;
     bottom: 15px;
   }
+  
+  .sea-ice-date-display {
+    font-size: 20px;
+    top: 15px;
+    left: 15px;
+  }
+  
+  .sea-ice-source-display {
+    font-size: 12px;
+    bottom: 15px;
+    left: 15px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -239,5 +282,17 @@
   .play-button {
     width: 28px;
     height: 28px;
+  }
+  
+  .sea-ice-date-display {
+    font-size: 16px;
+    top: 10px;
+    left: 10px;
+  }
+  
+  .sea-ice-source-display {
+    font-size: 10px;
+    bottom: 10px;
+    left: 10px;
   }
 } 
