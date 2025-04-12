@@ -88,11 +88,8 @@ function setupVisibilityObserver() {
 
 // Load and sort available dates
 function loadDatesData() {
-  // Pattern to match: yyyy-mm-15.png
-  const datePattern = /(\d{4})-(\d{2})-15/;
-  
   // Simulate fetching the list of files (normally this would be from an API)
-  // For now we'll create data for 2012-2023, starting from July 2012
+  // For now we'll create data for July 2012 onwards
   const dates = [];
   
   // Add dates from July 2012 to December 2012 first
@@ -109,7 +106,7 @@ function loadDatesData() {
   }
   
   // Add full years from 2013 to 2024
-  for (let year = 2012; year <= 2024; year++) {
+  for (let year = 2013; year <= 2024; year++) {
     for (let month = 1; month <= 12; month++) {
       const monthStr = month.toString().padStart(2, '0');
       const dateStr = `${year}-${monthStr}-15`;

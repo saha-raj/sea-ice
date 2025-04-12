@@ -285,7 +285,7 @@
   }
   
   .sea-ice-date-display {
-    font-size: 16px;
+    font-size: 48px;
     top: 10px;
     left: 10px;
   }
@@ -295,4 +295,60 @@
     bottom: 10px;
     left: 10px;
   }
-} 
+}
+
+/* Ensure the SH visualization container has height */
+#sea-ice-SH-visualization {
+  display: block; /* Make sure it's treated as a block */
+  width: 100%; /* Take full width */
+  aspect-ratio: 16 / 9; /* Set aspect ratio (adjust if needed, e.g., 4 / 3) */
+  height: auto; /* Height will be determined by width + aspect ratio */
+  background-color: #111; /* Optional: Dark background for debugging */
+  position: relative; /* Needed for absolute positioning of overlays */
+  overflow: hidden; /* Hide anything extending beyond bounds */
+}
+
+/* You might already have rules for .full-width-image or .media-container */
+/* Ensure they don't conflict or override the height/aspect-ratio */
+
+.media-container {
+    margin-bottom: 2em; /* Example existing style */
+    position: relative; /* Often needed for captions/overlays */
+}
+
+.full-width-image {
+    width: 100%;
+    /* If this class sets height: 0 or similar, it could be the problem */
+    /* Make sure height is auto or not set here if using aspect-ratio on the ID */
+    /* height: auto; */
+}
+
+/* Styles for the overlays within the container */
+.sea-ice-date-display,
+.sea-ice-source-display {
+    position: absolute;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 48px;
+    z-index: 10; /* Ensure overlays are above the canvas */
+    pointer-events: none; /* Prevent overlays from blocking mouse interaction */
+}
+
+.sea-ice-date-display {
+    top: 15px;
+    left: 15px;
+    font-size: 48px; /* Make date slightly larger */
+    font-weight: bold;
+}
+
+.sea-ice-source-display {
+    bottom: 15px;
+    left: 15px;
+    font-size: 12px; /* Make source smaller */
+}
+
+/* Ensure debug display is also positioned correctly */
+/* (You already have inline styles, but a class might be cleaner) */ 
