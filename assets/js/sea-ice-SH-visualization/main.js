@@ -18,10 +18,10 @@ let SH_currentImageIndex = 0;
 let SH_isVisible = false;
 let SH_imagesData = []; // Will hold chronologically sorted dates
 let SH_yearStartIndices = {}; // To track where each year starts in the array
-let SH_hasResetOutlines = true; // Flag to track if we've reset outlines
 let SH_dateDisplay = null; // Element to display current date
 let SH_sourceDisplay = null; // Element to display the source
 let SH_debugDisplay = null; // TEMPORARY: Element to display camera position and target
+let SH_hasResetOutlines = false; // Added to track if outlines have been reset
 
 // Function to convert Lat/Lon to 3D point on sphere (prefixed function)
 function SH_latLonToVector3(lat, lon, radius) {
@@ -76,6 +76,8 @@ function SH_createOutlineTube(coordinates, radius = 2.02, tubeRadius = 0.005, co
   // Create the material (adjust color, opacity etc. as needed)
   const tubeMaterial = new THREE.MeshBasicMaterial({
       color: color,
+      transparent: true, // Enable transparency
+      opacity: 1.0       // Start fully opaque
       // wireframe: true // Optional: for debugging
    });
 
@@ -96,24 +98,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Create overlay elements for displaying information (prefixed function)
 function SH_createOverlayElements() {
-  // Target the correct container ID
   const container = document.getElementById('sea-ice-SH-visualization');
   if (!container) return;
 
   // Create date display element (top left)
   SH_dateDisplay = document.createElement('div');
-  SH_dateDisplay.className = 'sea-ice-date-display'; // Consider unique class?
+  SH_dateDisplay.className = 'sea-ice-date-display'; // Use same class as NH
   container.appendChild(SH_dateDisplay);
 
   // Create source display element (bottom left)
   SH_sourceDisplay = document.createElement('div');
-  SH_sourceDisplay.className = 'sea-ice-source-display'; // Consider unique class?
+  SH_sourceDisplay.className = 'sea-ice-source-display'; // Use same class as NH
   SH_sourceDisplay.innerHTML = 'Source: Institute of Environmental Physics, University of Bremen, Germany';
   container.appendChild(SH_sourceDisplay);
 
+  // --- REMOVE Debug Display Creation ---
+  /*
   // TEMPORARY: Create debug display for camera position and target (bottom right)
   SH_debugDisplay = document.createElement('div');
-  // Apply necessary styles (consider unique class?)
   SH_debugDisplay.style.position = 'absolute';
   SH_debugDisplay.style.bottom = '20px';
   SH_debugDisplay.style.right = '20px';
@@ -127,6 +129,8 @@ function SH_createOverlayElements() {
   SH_debugDisplay.style.textAlign = 'left';
   SH_debugDisplay.style.whiteSpace = 'pre';
   container.appendChild(SH_debugDisplay);
+  */
+  // --- END REMOVE ---
 }
 
 // Setup Intersection Observer (prefixed function)
@@ -207,27 +211,34 @@ function SH_loadDatesData() {
 
 // Start animation cycle (prefixed function)
 function SH_startAnimation() {
-  if (SH_animationInterval) return;
+  if (SH_animationInterval) return; // Already running
 
-  // Reset outlines at the start of a new animation cycle
+  // --- ADD: Reset outlines at the start if needed (like NH) ---
+  // Reset outlines at the start of a new animation cycle if they weren't already reset
   if (SH_hasResetOutlines === false) {
-    SH_resetOutlines(); // Call prefixed function
+     SH_resetOutlines(); // Call prefixed function
   }
+  // --- END ADD ---
 
   // Load the first image immediately
   SH_updateIceData(SH_currentImageIndex); // Call prefixed function
 
-  // Set interval for animation (change every 100 milliseconds)
+  // Set interval for animation (adjust timing as needed)
   SH_animationInterval = setInterval(() => {
+    // Increment index and loop around
     SH_currentImageIndex = (SH_currentImageIndex + 1) % SH_imagesData.length;
 
+    // --- ADD: Reset outlines on loop (like NH) ---
     // If we've looped back to the beginning, reset the outlines
     if (SH_currentImageIndex === 0) {
-      SH_resetOutlines(); // Call prefixed function
+       SH_resetOutlines(); // Call prefixed function
     }
+    // --- END ADD ---
 
+    // Update texture and potentially outline for the new index
     SH_updateIceData(SH_currentImageIndex); // Call prefixed function
-  }, 200);
+  }, 200); // Interval time (e.g., 200ms)
+  console.log("SH: Animation interval started.");
 }
 
 // Stop animation cycle (prefixed function)
@@ -236,28 +247,6 @@ function SH_stopAnimation() {
     clearInterval(SH_animationInterval);
     SH_animationInterval = null;
   }
-}
-
-// Reset all outlines (prefixed function)
-function SH_resetOutlines() {
-  // Remove all outline tubes
-  Object.values(SH_outlineTubes).forEach(tubes => {
-    if (tubes && Array.isArray(tubes)) {
-      console.log(`SH: Removing ${tubes.length} existing outline tube(s)`);
-      tubes.forEach(tube => {
-        if (tube && SH_scene) {
-          SH_scene.remove(tube);
-          // Dispose geometry and material to free memory (important!)
-          if (tube.geometry) tube.geometry.dispose();
-          if (tube.material) tube.material.dispose();
-        }
-      });
-    }
-  });
-
-  // Clear the outlines object
-  SH_outlineTubes = {};
-  SH_hasResetOutlines = true;
 }
 
 // Update ice data with new texture and outline (prefixed function)
@@ -271,13 +260,12 @@ function SH_updateIceData(index) {
   // Update ice texture
   SH_updateIceTexture(data.imageFile); // Call prefixed function
 
-  // Only show outline when month is September (09) - Adjust month for SH if needed (e.g., March '03')
-  if (data.month === '03') { // Example: Using March for SH minimum
+  // Only show outline when month is March ('03')
+  if (data.month === '02') {
     // Only add this outline if we don't already have it for this year
-    if (!SH_outlineTubes[data.year]) {
-      SH_updateIceOutline(data.year, data.outlineFile); // Call prefixed function
-      SH_hasResetOutlines = false;
-    }
+    // Note: SH_updateIceOutline already handles removing old tubes for THIS specific year
+    // before adding new ones. We don't need an extra check here.
+    SH_updateIceOutline(data.year, data.outlineFile); // Call prefixed function
   }
 
   // Update the date display with current date
@@ -332,20 +320,21 @@ function SH_updateIceTexture(texturePath) {
 
 // Update ice outline based on GeoJSON data (prefixed function)
 function SH_updateIceOutline(year, outlineFile) {
-  // Remove existing outlines for this year (if any)
+  // --- Existing cleanup logic for the specific year ---
+  // First, remove any existing tubes specifically for THIS year before adding new ones
   if (SH_outlineTubes[year] && Array.isArray(SH_outlineTubes[year])) {
-    console.log(`SH: Removing ${SH_outlineTubes[year].length} existing outline tube(s) for ${year}`);
+    // console.log(`SH: Removing ${SH_outlineTubes[year].length} existing outline tube(s) for year ${year} before update.`); // Optional log
     SH_outlineTubes[year].forEach(tube => {
-      if (tube && SH_scene) { // Check if tube and scene exist
-         SH_scene.remove(tube);
-         // Dispose geometry and material to free memory (important!)
-         if (tube.geometry) tube.geometry.dispose();
-         if (tube.material) tube.material.dispose();
+      if (tube && SH_scene) {
+        SH_scene.remove(tube);
+        if (tube.geometry) tube.geometry.dispose();
+        if (tube.material) tube.material.dispose();
       }
     });
   }
-  // Ensure the entry for the year is an empty array before adding new tubes
-  SH_outlineTubes[year] = [];
+  // We will initialize SH_outlineTubes[year] below after fetch confirms data exists
+  // --- End Existing cleanup ---
+
 
   fetch(outlineFile)
     .then(response => {
@@ -355,50 +344,41 @@ function SH_updateIceOutline(year, outlineFile) {
       return response.json();
     })
     .then(data => {
-      // Validate the GeoJSON structure: Must be a FeatureCollection with features array
+      // Validate the structure
       if (!data || data.type !== 'FeatureCollection' || !Array.isArray(data.features)) {
-        console.error(`SH: Invalid GeoJSON structure in: ${outlineFile}`, data);
-        // Clear any potentially half-added tubes for this year just in case
-        if (SH_outlineTubes[year] && Array.isArray(SH_outlineTubes[year])) {
-            SH_outlineTubes[year].forEach(tube => {
-                if (tube && SH_scene) SH_scene.remove(tube);
-                 // Dispose geometry and material
-                 if (tube.geometry) tube.geometry.dispose();
-                 if (tube.material) tube.material.dispose();
-            });
-        }
-        SH_outlineTubes[year] = []; // Reset to empty array
+        console.error(`SH: Invalid GeoJSON structure or missing features in ${outlineFile}:`, data);
+        SH_outlineTubes[year] = []; // Ensure it's an empty array even on error to prevent later issues
         return; // Stop processing this file
       }
 
       console.log(`SH: Processing ${data.features.length} features from ${outlineFile}`);
 
-      // Iterate through each feature in the collection
+      // --- ADD: Initialize the array for this year ---
+      // Ensure the array for this year exists before pushing tubes into it
+      SH_outlineTubes[year] = [];
+      // --- END ADD ---
+
+      // Process each feature (outline) in the GeoJSON file
       data.features.forEach((feature, index) => {
-        // Validate each feature: Must be a Feature with LineString geometry and coordinates
-        if (!feature || feature.type !== 'Feature' ||
-            !feature.geometry || feature.geometry.type !== 'LineString' ||
-            !Array.isArray(feature.geometry.coordinates) || feature.geometry.coordinates.length < 2) {
-          console.warn(`SH: Skipping invalid feature at index ${index} in ${outlineFile}:`, feature);
-          return; // Skip this invalid feature
+        // Check if the feature has geometry and coordinates
+        if (!feature || !feature.geometry || !feature.geometry.coordinates || feature.geometry.type !== 'LineString') {
+          console.warn(`SH: Skipping feature ${index} in ${outlineFile} due to missing/invalid geometry or not being a LineString.`);
+          return; // Skip this feature
         }
 
-        // Extract coordinates
         const coordinates = feature.geometry.coordinates;
+        // Define color and thickness for the outline
+        const newThickness = 0.004; // Example thickness
+        const newColor = 0xe9c46a; // Example color (yellow)
 
-        // Create the outline tube mesh for this feature
-        // Arguments: coordinates, sphereRadius, tubeThickness, tubeColor
-        // Example: Make the tube thicker (0.008) and yellow (0xffff00)
-        const newThickness = 0.003; // Adjust this value for thickness
-        const newColor = 0x6AA6C8; // Adjust this value for color (e.g., yellow)
+        // Create the tube mesh for this specific feature
+        const tubeMesh = SH_createOutlineTube(coordinates, 2.02, newThickness, newColor); // Use prefixed function
 
-        const tubeMesh = SH_createOutlineTube(coordinates, 2.02, newThickness, newColor);
-
+        // If tube creation was successful, add it to the scene and the array for this year
         if (tubeMesh) {
-          // Add the tube to the scene
           SH_scene.add(tubeMesh);
           // Store the tube mesh in the array for this year
-          SH_outlineTubes[year].push(tubeMesh);
+          SH_outlineTubes[year].push(tubeMesh); // This should now work
         } else {
              console.warn(`SH: Failed to create tube for feature ${index} in ${outlineFile}`);
         }
@@ -407,18 +387,11 @@ function SH_updateIceOutline(year, outlineFile) {
 
     })
     .catch(error => {
-      // Log error more informatively
       console.error(`SH: Error loading or processing the outline file: ${outlineFile}`, error);
-      // Clear any potentially half-added tubes for this year
-      if (SH_outlineTubes[year] && Array.isArray(SH_outlineTubes[year])) {
-          SH_outlineTubes[year].forEach(tube => {
-              if (tube && SH_scene) SH_scene.remove(tube);
-               // Dispose geometry and material
-               if (tube.geometry) tube.geometry.dispose();
-               if (tube.material) tube.material.dispose();
-          });
+      // Ensure the entry for the year is at least an empty array to prevent downstream errors
+      if (!SH_outlineTubes[year]) {
+          SH_outlineTubes[year] = [];
       }
-      SH_outlineTubes[year] = []; // Reset to empty array on error
     });
 }
 
@@ -445,7 +418,7 @@ function SH_initScene() {
     console.log(`SH: Camera created (aspect ${aspect.toFixed(2)}, size ${width}x${height})`);
 
     // !!! POSITION CAMERA FOR SH VIEW (e.g., below South Pole looking up) !!!
-    SH_camera.position.set(0, -3.5, 0.1); // Position below the pole, slightly out
+    SH_camera.position.set(0, -4.38, 0.03); // Position below the pole, slightly out
     console.log("SH: Camera position set for SH view.");
 
     SH_renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -521,7 +494,7 @@ function SH_initScene() {
     // Create controls (prefixed variable)
     SH_controls = new OrbitControls(SH_camera, SH_renderer.domElement);
     // Target the South Pole area (adjust Y slightly if needed)
-    SH_controls.target.set(0, -1, 0);
+    SH_controls.target.set(0, -1, -0.03);
     SH_controls.enableDamping = true; // Optional: Smooths out controls
     SH_controls.dampingFactor = 0.1;
     SH_controls.rotateSpeed = 0.5;
@@ -560,34 +533,64 @@ function SH_onWindowResize() {
 function SH_animate() {
   requestAnimationFrame(SH_animate);
 
-  // --- UNCOMMENT CONTROLS UPDATE ---
-  if (SH_controls) SH_controls.update(); // Update controls each frame
+  // Update controls each frame
+  if (SH_controls) SH_controls.update();
+
+  // FADING LOGIC START
+  const FADE_RATE = 0.004; // How much opacity decreases each frame
+  const REMOVE_THRESHOLD = 0.01; // Opacity level below which tubes are removed
+
+  // Iterate through all years that have outlines
+  Object.keys(SH_outlineTubes).forEach(year => {
+    const tubes = SH_outlineTubes[year];
+    const remainingTubes = []; // Keep track of tubes that are still visible
+
+    if (Array.isArray(tubes)) {
+      tubes.forEach(tube => {
+        if (tube && tube.material) {
+          // Decrease opacity
+          tube.material.opacity -= FADE_RATE;
+
+          // Check if tube should be kept or removed
+          if (tube.material.opacity > REMOVE_THRESHOLD) {
+            remainingTubes.push(tube); // Keep this tube
+          } else {
+            // Opacity is too low, remove the tube
+            if (SH_scene) SH_scene.remove(tube);
+            if (tube.geometry) tube.geometry.dispose();
+            if (tube.material) tube.material.dispose();
+            // console.log(`SH: Removed faded outline tube for year ${year}`); // Optional log
+          }
+        }
+      });
+
+      // Update the array for the year with only the remaining tubes
+      SH_outlineTubes[year] = remainingTubes;
+
+      // Optional: Clean up the year entry if no tubes remain
+      if (remainingTubes.length === 0) {
+        delete SH_outlineTubes[year];
+        // console.log(`SH: Removed year ${year} from outline tracking.`); // Optional log
+      }
+    }
+  });
+  // FADING LOGIC END
+
 
   if (SH_renderer && SH_scene && SH_camera) {
     try {
-        // --- REMOVE EXPLICIT CLEAR --- (Render implicitly clears unless autoClear=false)
-        // SH_renderer.clear(); // Remove explicit clear
         SH_renderer.render(SH_scene, SH_camera);
     } catch (renderError) {
         console.error("SH: Error during render:", renderError);
-        return;
-    }
-
-    // Update debug display (now includes target)
-    if (SH_debugDisplay) {
-      const pos = SH_camera.position;
-      // Check if controls exist before accessing target
-      const target = SH_controls ? SH_controls.target : { x: NaN, y: NaN, z: NaN };
-      SH_debugDisplay.textContent =
-`SH Camera Position:
-  x: ${pos.x.toFixed(2)}
-  y: ${pos.y.toFixed(2)}
-  z: ${pos.z.toFixed(2)}
-
-SH Controls Target:
-  x: ${target.x.toFixed(2)}
-  y: ${target.y.toFixed(2)}
-  z: ${target.z.toFixed(2)}`;
     }
   }
-} 
+}
+
+// Reset outlines (prefixed function)
+function SH_resetOutlines() {
+  // Reset outlines for all years
+  SH_outlineTubes = {};
+  // Reset hasResetOutlines flag
+  SH_hasResetOutlines = true;
+  console.log("SH: Outlines reset.");
+}

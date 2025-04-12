@@ -21,7 +21,6 @@ let yearStartIndices = {}; // To track where each year starts in the array
 let hasResetOutlines = true; // Flag to track if we've reset outlines at the beginning of animation
 let dateDisplay = null; // Element to display current date
 let sourceDisplay = null; // Element to display the source
-let debugDisplay = null; // TEMPORARY: Element to display camera position and target
 
 // Initialize when the document is loaded
 document.addEventListener('DOMContentLoaded', function() {
@@ -46,22 +45,6 @@ function createOverlayElements() {
   sourceDisplay.className = 'sea-ice-source-display';
   sourceDisplay.innerHTML = 'Source: Institute of Environmental Physics, University of Bremen, Germany';
   container.appendChild(sourceDisplay);
-  
-  // TEMPORARY: Create debug display for camera position and target (bottom right)
-  debugDisplay = document.createElement('div');
-  debugDisplay.style.position = 'absolute';
-  debugDisplay.style.bottom = '20px';
-  debugDisplay.style.right = '20px';
-  debugDisplay.style.fontFamily = 'monospace';
-  debugDisplay.style.fontSize = '12px';
-  debugDisplay.style.color = '#ffffff';
-  debugDisplay.style.backgroundColor = 'rgba(0,0,0,0.5)';
-  debugDisplay.style.padding = '10px';
-  debugDisplay.style.borderRadius = '4px';
-  debugDisplay.style.zIndex = '100';
-  debugDisplay.style.textAlign = 'left';
-  debugDisplay.style.whiteSpace = 'pre';
-  container.appendChild(debugDisplay);
 }
 
 // Setup Intersection Observer to detect when visualization enters viewport
@@ -170,14 +153,19 @@ function stopAnimation() {
 function resetOutlines() {
   // Remove all outline tubes
   Object.values(outlineTubes).forEach(tube => {
-    if (tube) {
+    if (tube && scene) { // Check if tube and scene exist
       scene.remove(tube);
+      // --- ADD: Dispose geometry and material ---
+      if (tube.geometry) tube.geometry.dispose();
+      if (tube.material) tube.material.dispose();
+      // --- END ADD ---
     }
   });
   
   // Clear the outlines object
   outlineTubes = {};
   hasResetOutlines = true;
+  // console.log("NH: All outlines reset."); // Optional log
 }
 
 // Update ice data with new texture and outline
@@ -252,59 +240,90 @@ function updateIceOutline(outlinePath, year) {
   fetch(outlinePath)
     .then(response => response.json())
     .then(data => {
-      const coordinates = data.geometry.coordinates;
-      
+      // --- EDIT: Handle potential FeatureCollection ---
+      // Check if the root is a FeatureCollection
+      let coordinates;
+      if (data.type === 'FeatureCollection' && data.features && data.features.length > 0) {
+        // Use the coordinates from the first feature's geometry
+        // Assuming the first feature is the primary outline we want
+        if (data.features[0].geometry && data.features[0].geometry.type === 'LineString') {
+          coordinates = data.features[0].geometry.coordinates;
+        } else {
+          console.warn(`NH: First feature in ${outlinePath} is not a LineString.`);
+          return; // Skip if the first feature isn't a LineString
+        }
+      } else if (data.type === 'Feature' && data.geometry && data.geometry.type === 'LineString') {
+        // Handle the old single Feature format
+        coordinates = data.geometry.coordinates;
+      } else {
+        console.error(`NH: Invalid GeoJSON structure in ${outlinePath}:`, data);
+        return; // Stop if the structure is not recognized
+      }
+
+      if (!coordinates || coordinates.length < 2) {
+        console.warn(`NH: No valid coordinates found or not enough points in ${outlinePath}`);
+        return;
+      }
+      // --- END EDIT ---
+
+
       // Create a line geometry from the coordinates
       const points = [];
-      
+
       // Convert lon/lat to 3D positions
       coordinates.forEach(coord => {
         const lon = coord[0];
         const lat = coord[1];
-        
+
         // Convert to radians
         const phi = (90 - lat) * (Math.PI / 180);
         const theta = (lon + 180) * (Math.PI / 180);
-        
-        // Calculate position on sphere with slight offset to avoid z-fighting
-        // Add a tiny bit more offset for each year to avoid z-fighting between outlines
-        const yearOffset = (parseInt(year) - 2015) * 0.0001;
-        const radius = 2.002 + yearOffset;
+
+        // Calculate position on sphere with slight offset
+        const radius = 2.002; // Simplified radius for NH
         const x = -radius * Math.sin(phi) * Math.cos(theta);
         const y = radius * Math.cos(phi);
         const z = radius * Math.sin(phi) * Math.sin(theta);
-        
+
         points.push(new THREE.Vector3(x, y, z));
       });
-      
+
+      if (points.length < 2) {
+          console.warn(`NH: Not enough valid points after conversion for ${outlinePath}`);
+          return;
+      }
+
+
       // Create a smooth curve from the points
-      const curve = new THREE.CatmullRomCurve3(points, true); // true makes it a closed curve
-      
-      // Create a tube geometry around the curve (this gives actual thickness unlike linewidth)
+      const curve = new THREE.CatmullRomCurve3(points, false); // Use false for LineString
+
+      // Create a tube geometry around the curve
       const tubeGeometry = new THREE.TubeGeometry(
         curve,           // path
-        points.length * 2, // tubularSegments - more segments = smoother tube
-        0.003,            // radius of tube
-        20,               // radiusSegments - more segments = smoother tube cross-section
-        true             // closed
+        Math.max(1, points.length * 2), // tubularSegments
+        0.004,            // radius of tube
+        8,               // radiusSegments (reduced for potential performance)
+        false             // closed (false for LineString)
       );
-      
+
+      // --- EDIT: Make material transparent ---
       // Create material with the requested color
-      const material = new THREE.MeshBasicMaterial({ 
-        // color: 0xeb5e28,
-        color: 0x6AA6C8,
-        transparent: true,
-        opacity: 0.9
+      const material = new THREE.MeshBasicMaterial({
+        color: 0xe9c46a,   // Existing NH color
+        transparent: true, // Enable transparency
+        opacity: 1.0       // Start fully opaque
       });
-      
+      // --- END EDIT ---
+
       // Create the tube mesh and add it to the scene
       const tube = new THREE.Mesh(tubeGeometry, material);
       scene.add(tube);
-      
+
       // Store the outline in our outlines object
+      // If multiple tubes per year were needed, this would need changing
       outlineTubes[year] = tube;
     })
-    .catch(error => console.error('Error loading the outline file:', error));
+    .catch(error => console.error(`NH: Error loading or processing outline file ${outlinePath}:`, error));
 }
 
 // Initialize THREE.js scene
@@ -390,23 +409,39 @@ function onWindowResize() {
 function animate() {
   requestAnimationFrame(animate);
   if (controls) controls.update();
+
+
+  // --- FADING LOGIC START (Copied from SH) ---
+  const FADE_RATE = 0.004; // How much opacity decreases each frame
+  const REMOVE_THRESHOLD = 0.01; // Opacity level below which tubes are removed
+
+  // Iterate through all years that have outlines
+  Object.keys(outlineTubes).forEach(year => {
+    const tube = outlineTubes[year]; // NH stores single tube per year currently
+
+    // Check if it's a valid tube with material
+    if (tube && tube.material) {
+        // Decrease opacity
+        tube.material.opacity -= FADE_RATE;
+
+        // Check if tube should be removed based on opacity
+        if (tube.material.opacity <= REMOVE_THRESHOLD) {
+            // Opacity is too low, remove the tube now
+            if (scene) scene.remove(tube);
+            if (tube.geometry) tube.geometry.dispose();
+            if (tube.material) tube.material.dispose();
+            delete outlineTubes[year]; // Remove the entry for this year
+            // console.log(`NH: Removed faded outline tube for year ${year}`); // Optional log
+        }
+    } else if (tube) {
+        // If tube exists but material doesn't (shouldn't happen), clean up
+        delete outlineTubes[year];
+    }
+  });
+  // --- FADING LOGIC END ---
+
+
   if (renderer && scene && camera) {
     renderer.render(scene, camera);
-    
-    // TEMPORARY: Update debug display with camera position and target
-    if (debugDisplay) {
-      const pos = camera.position;
-      const target = controls.target;
-      debugDisplay.textContent = 
-`Camera Position:
-  x: ${pos.x.toFixed(2)}
-  y: ${pos.y.toFixed(2)}
-  z: ${pos.z.toFixed(2)}
-
-Controls Target:
-  x: ${target.x.toFixed(2)}
-  y: ${target.y.toFixed(2)}
-  z: ${target.z.toFixed(2)}`;
-    }
   }
 } 
