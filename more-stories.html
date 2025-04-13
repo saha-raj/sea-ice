@@ -1,4 +1,38 @@
 <div class="more-stories">
+    <!-- START: Add specific styles for larger nav buttons -->
+    <style>
+        /* Target buttons specifically within this component */
+        .more-stories .carousel-nav {
+            /* Override size */
+            width: 48px;
+            height: 48px;
+            padding: 0; /* Ensure padding doesn't interfere */
+
+            /* Override positioning if needed (adjust values as required) */
+            /* These assume the original position was relative to the container */
+             /* left: -24px;  Example */
+             /* right: -24px; Example */
+        }
+
+        /* Target the SVG inside the buttons */
+        .more-stories .carousel-nav svg {
+            /* Override SVG size */
+            width: 28px;
+            height: 28px;
+        }
+
+         /* Optional: Adjust positioning for smaller screens if needed */
+         @media (max-width: 600px) {
+            .more-stories .carousel-nav.prev {
+                /* left: -15px; Example */
+            }
+            .more-stories .carousel-nav.next {
+                /* right: -15px; Example */
+            }
+         }
+    </style>
+    <!-- END: Add specific styles for larger nav buttons -->
+
     <div class="content">
         <h3>More Visual Stories</h3>
         
@@ -11,6 +45,9 @@
             
             <div class="stories-carousel">
                 <div class="stories-track">
+
+
+
                     <a href="https://saha-raj.github.io/tipping-points-climate/" class="story-card">
                         <div class="story-card-media">
                             <div class="video-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
@@ -23,6 +60,24 @@
                         <div class="story-card-content">
                             <h4>Tipping Points in Climate</h4>
                             <p>A interactive model to demonstrate tipping points in climate</p>
+                        </div>
+                    </a>
+
+
+                    <a href="https://saha-raj.github.io/computer-vision-building-damage/" class="story-card">
+                        <div class="story-card-media">
+                            <div class="video-wrapper"
+                                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline
+                                    style="border:none !important; outline:none !important; box-shadow:none !important;">
+                                    <source src="images/stories/00_building-damage.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <div class="story-card-content">
+                            <h4>Computer Vision to Detect Building Damage</h4>
+                            <p>Annotation tools and ML to detect building damage from satellite imagery</p>
                         </div>
                     </a>
                     
@@ -40,6 +95,23 @@
                             <p>A time lapse / computer vision analysis of the coastline of Bangladesh</p>
                         </div>
                     </a>
+
+                    <!-- <a href="https://saha-raj.github.io/sea-ice/" class="story-card">
+                        <div class="story-card-media">
+                            <div class="video-wrapper"
+                                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline
+                                    style="border:none !important; outline:none !important; box-shadow:none !important;">
+                                    <source src="images/stories/11_sea-ice-arctic.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <div class="story-card-content">
+                            <h4>The Diminishing Summer Sea Ice</h4>
+                            <p>A visualization of the shrinking of summer sea ice in the Arctic and Antarctic</p>
+                        </div>
+                    </a> -->
                     
                     <a href="https://saha-raj.github.io/prisoners-dilemma/" class="story-card">
                         <div class="story-card-media">
@@ -56,6 +128,23 @@
                         </div>
                     </a>
                     
+                    <a href="https://saha-raj.github.io/great-salt-lake/" class="story-card">
+                        <div class="story-card-media">
+                            <div class="video-wrapper"
+                                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline
+                                    style="border:none !important; outline:none !important; box-shadow:none !important;">
+                                    <source src="images/stories/02_great_salt_lake.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <div class="story-card-content">
+                            <h4>The Changing Great Salt Lake</h4>
+                            <p>How the Great Salt Lake has been shrinking over time</p>
+                        </div>
+                    </a>
+
                     <a href="https://saha-raj.github.io/polar-vortex-viz/" class="story-card">
                         <div class="story-card-media">
                             <div class="video-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
@@ -70,11 +159,30 @@
                             <p>A visualization of the polar jet stream and temperature anomalies in the Northern Hemisphere</p>
                         </div>
                     </a>
-                    
+
+                    <a href="https://saha-raj.github.io/cv-biolum/" class="story-card">
+                        <div class="story-card-media">
+                            <div class="video-wrapper"
+                                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline
+                                    style="border:none !important; outline:none !important; box-shadow:none !important;">
+                                    <source src="images/stories/10_fireflies_movie_tracks.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <div class="story-card-content">
+                            <h4>Computer Vision + Bioluminescence</h4>
+                            <p>Using computer vision algorithms to track and analyze bioluminescent displays</p>
+                        </div>
+                    </a>
+
                     <a href="https://saha-raj.github.io/firefly-synchrony/" class="story-card">
                         <div class="story-card-media">
-                            <div class="video-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
-                                <video autoplay muted loop playsinline style="border:none !important; outline:none !important; box-shadow:none !important;">
+                            <div class="video-wrapper"
+                                style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline
+                                    style="border:none !important; outline:none !important; box-shadow:none !important;">
                                     <source src="images/stories/04b_fireflies.mp4" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
@@ -82,7 +190,22 @@
                         </div>
                         <div class="story-card-content">
                             <h4>Synchrony in Fireflies</h4>
-                            <p>A simulation and visualization of the synchrony in fireflies</p>
+                            <p>A simulation and visualization of synchrony in fireflies</p>
+                        </div>
+                    </a>
+                    
+                    <a href="https://saha-raj.github.io/ai-pathfinding-algos/" class="story-card">
+                        <div class="story-card-media">
+                            <div class="video-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
+                                <video autoplay muted loop playsinline style="border:none !important; outline:none !important; box-shadow:none !important;">
+                                    <source src="images/stories/09_maze.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        <div class="story-card-content">
+                            <h4>Pathfinding Algorithms</h4>
+                            <p>An interactive visualization of pathfinding algorithms</p>
                         </div>
                     </a>
                     
@@ -113,20 +236,6 @@
                         </div>
                     </a>
                     
-                    <!-- <a href="https://saha-raj.github.io/great-salt-lake/" class="story-card">
-                        <div class="story-card-media">
-                            <div class="video-wrapper" style="position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden;">
-                                <video autoplay muted loop playsinline style="border:none !important; outline:none !important; box-shadow:none !important;">
-                                    <source src="images/stories/02_great_salt_lake.mp4" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        </div>
-                        <div class="story-card-content">
-                            <h4>The Changing Great Salt Lake</h4>
-                            <p>How the Great Salt Lake has been shrinking over time</p>
-                        </div>
-                    </a> -->
                     
                     <a href="https://saha-raj.github.io/tile-pattern-app/" class="story-card">
                         <div class="story-card-media">
