@@ -880,13 +880,14 @@ button:disabled {
 }
 
 .citation a {
-    color: #3a86ff;
+    color: #0077b6;
     text-decoration: none;
     font-weight: 500;
 }
 
 .citation a:hover {
-    text-decoration: underline;
+    color: #f28482;
+    text-decoration: none;
 }
 
 /* Media container for images and videos */
@@ -1385,4 +1386,16 @@ video {
 .media-container video.full-width-image::-webkit-media-controls {
     display: flex !important;
     visibility: visible !important;
+}
+
+a,
+a:visited {
+  color: #0077b6;
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  color: #f28482;
+  text-decoration: none;
 }
